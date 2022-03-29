@@ -1,0 +1,1 @@
+snakemake --resources mem_mb=65000 -c 32 test
