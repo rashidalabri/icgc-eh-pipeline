@@ -43,10 +43,10 @@ rule genotype_aws:
     log:
         S3.remote('icgc-eh-bucket/logs/aws/{object_id}.log')
     resources:
-        mem_mb=25600
+        mem_mb=25600,
+        time=24
     threads: 16
     shell:
-        "echo 'Working in directory {params.out_dir}' && "
         "score-client download --output-dir {params.out_dir} --object-id {wildcards.object_id} && "
         "ExpansionHunter --reads {params.out_dir}/{params.file_name} "
         "--reference {input.fa} "
@@ -71,17 +71,19 @@ rule genotype_pdc:
     output:
         json=S3.remote('icgc-eh-bucket/results/pdc/{guid}.json'),
         vcf=S3.remote('icgc-eh-bucket/results/pdc/{guid}.vcf'),
-        realigned_bam=S3.remote('icgc-eh-bucket/results/pdc/{guid}_realigned.bam'),
+        realigned_bam=S3.remote('icgc-eh-bucket/results/pdc/{guid}_realigned.bam')
+    envmodules:
+        "samtools/0.1.15"
     log:
         S3.remote('icgc-eh-bucket/logs/pdc/{guid}.log')
     resources:
-        mem_mb=25600
+        mem_mb=25600,
+        time=24
     threads: 16
     shell:
-        "echo 'Working in directory {params.out_dir}' && "
         "gen3-client download-single --profile=icgc --guid {wildcards.guid} "
-        "--download-path {params.out_dir} --no-prompt --skip-completed --protocol s3 && "
-        "ExpansionHunter --reads {params.out_dir}/{params.file_name} "
+        "--download-path {tmpdir} --no-prompt --skip-completed && "
+        "ExpansionHunter --reads {tmpdir}/{params.file_name} "
         "--reference {input.fa} "
         "--variant-catalog {input.var} "
         "--output-prefix {params.prefix} "
@@ -89,4 +91,4 @@ rule genotype_pdc:
         "--analysis-mode streaming "
         "--threads {threads} "
         "> {log} && "
-        "rm -f {params.out_dir}/{params.file_name}"
+        "rm -f {tmpdir}/{params.file_name}"
