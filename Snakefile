@@ -26,6 +26,19 @@ rule test:
         S3.remote("icgc-eh-bucket/results/aws/ccf30f0f-0ec1-5aa2-8eb3-14cb1f4f58cd_realigned.bam"),
         S3.remote("icgc-eh-bucket/results/pdc/39dfdb0b-4a7d-4b35-ba0b-abd85b39f846_realigned.bam")
 
+rule test_pdc:
+    input:
+        S3.remote("icgc-eh-bucket/results/pdc/39dfdb0b-4a7d-4b35-ba0b-abd85b39f846.json"),
+        S3.remote("icgc-eh-bucket/results/pdc/39dfdb0b-4a7d-4b35-ba0b-abd85b39f846.vcf"),
+        S3.remote("icgc-eh-bucket/results/pdc/39dfdb0b-4a7d-4b35-ba0b-abd85b39f846_realigned.bam")
+
+rule test_aws:
+    input:
+        S3.remote("icgc-eh-bucket/results/aws/ccf30f0f-0ec1-5aa2-8eb3-14cb1f4f58cd.json"),
+        S3.remote("icgc-eh-bucket/results/aws/ccf30f0f-0ec1-5aa2-8eb3-14cb1f4f58cd.vcf"),
+        S3.remote("icgc-eh-bucket/results/aws/ccf30f0f-0ec1-5aa2-8eb3-14cb1f4f58cd_realigned.bam")
+
+
 rule genotype_aws:
     input:
         fa="data/ref/hs37d5.fa.gz",
@@ -39,7 +52,7 @@ rule genotype_aws:
     output:
         json=S3.remote('icgc-eh-bucket/results/aws/{object_id}.json'),
         vcf=S3.remote('icgc-eh-bucket/results/aws/{object_id}.vcf'),
-        realigned_bam=S3.remote('icgc-eh-bucket/results/aws/{object_id}_realigned.bam'),
+        realigned_bam=S3.remote('icgc-eh-bucket/results/aws/{object_id}_realigned.bam')
     log:
         S3.remote('icgc-eh-bucket/logs/aws/{object_id}.log')
     resources:
