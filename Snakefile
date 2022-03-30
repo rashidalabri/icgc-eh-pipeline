@@ -5,13 +5,16 @@ S3 = S3RemoteProvider()
 AWS_SAMPLES = pd.read_table('data/manifest.aws.tsv').set_index("object_id", drop=False)
 PDC_SAMPLES = pd.read_table('data/manifest.pdc.tsv').set_index("guid", drop=False)
 
-rule all:
+rule aws:
     input:
         S3.remote(expand("icgc-eh-bucket/results/aws/{object_id}.json", object_id=AWS_SAMPLES.index)),
-        S3.remote(expand("icgc-eh-bucket/results/pdc/{guid}.json", guid=PDC_SAMPLES.index)),
         S3.remote(expand("icgc-eh-bucket/results/aws/{object_id}.vcf", object_id=AWS_SAMPLES.index)),
-        S3.remote(expand("icgc-eh-bucket/results/pdc/{guid}.vcf", guid=PDC_SAMPLES.index)),
         S3.remote(expand("icgc-eh-bucket/results/aws/{object_id}_realigned.bam", object_id=AWS_SAMPLES.index)),
+
+rule pdc:
+    input:
+        S3.remote(expand("icgc-eh-bucket/results/pdc/{guid}.json", guid=PDC_SAMPLES.index)),
+        S3.remote(expand("icgc-eh-bucket/results/pdc/{guid}.vcf", guid=PDC_SAMPLES.index)),
         S3.remote(expand("icgc-eh-bucket/results/pdc/{guid}_realigned.bam", guid=PDC_SAMPLES.index))
 
 rule test:
