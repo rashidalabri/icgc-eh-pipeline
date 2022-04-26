@@ -38,8 +38,7 @@ rule genotype_aws:
     params:
         sex=lambda wildcards: AWS_SAMPLES.loc[wildcards["object_id"], "sex"],
         file_name=lambda wildcards: AWS_SAMPLES.loc[wildcards["object_id"], "file_name"],
-        prefix=lambda wildcards, output: output.json[:-5],
-        out_dir=lambda wildcards, output: "/".join(output.json.split("/")[:-1])
+        prefix=lambda wildcards, output: output.json[:-5]
     output:
         json=S3.remote("icgc-eh-bucket/results/aws/{object_id}.json"),
         vcf=S3.remote("icgc-eh-bucket/results/aws/{object_id}.vc"),
