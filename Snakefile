@@ -43,19 +43,21 @@ rule genotype_aws:
     output:
         json=S3.remote("icgc-eh-bucket/results/aws/{object_id}.json"),
         vcf=S3.remote("icgc-eh-bucket/results/aws/{object_id}.vc"),
-        realigned_bam=S3.remote("icgc-eh-bucket/results/aws/{object_id}_realigned.bam"),
-        download_dir=temp(directory('download'))
+        realigned_bam=S3.remote("icgc-eh-bucket/results/aws/{object_id}_realigned.bam")
+    envmodules:
+        "samtools",
+        "oracle-java"
     log:
         score=S3.remote("icgc-eh-bucket/logs/aws/{guid}-eh.log"),
         eh=S3.remote("icgc-eh-bucket/logs/aws/{guid}-score-client.log")
     resources:
-        mem_mb=25000,
+        mem_mb=25600,
         time=24
     threads: 16
     shell:
-        "score-client download --output-dir {output.download_dir} "
+        "score-client --profile collab download --output-dir {tmpdir} "
         "--object-id {wildcards.object_id} > {log.score} && "
-        "ExpansionHunter --reads {output.download_dir}/{params.file_name} "
+        "ExpansionHunter --reads {tmpdir}/{params.file_name} "
         "--reference {input.fa} "
         "--variant-catalog {input.var} "
         "--output-prefix {params.prefix} "
@@ -78,7 +80,7 @@ rule genotype_pdc:
         vcf=S3.remote("icgc-eh-bucket/results/pdc/{guid}.vc"),
         realigned_bam=S3.remote("icgc-eh-bucket/results/pdc/{guid}_realigned.bam")
     envmodules:
-        "samtools/0.1.15"
+        "samtools"
     log:
         S3.remote("icgc-eh-bucket/logs/pdc/{guid}.log")
     resources:
