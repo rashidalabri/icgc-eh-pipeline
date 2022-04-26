@@ -47,8 +47,8 @@ rule genotype_aws:
         "samtools",
         "oracle-java"
     log:
-        score=S3.remote("icgc-eh-bucket/logs/aws/{guid}-eh.log"),
-        eh=S3.remote("icgc-eh-bucket/logs/aws/{guid}-score-client.log")
+        score=S3.remote("icgc-eh-bucket/logs/aws/{object_id}-eh.log"),
+        eh=S3.remote("icgc-eh-bucket/logs/aws/{object_id}-score-client.log")
     resources:
         mem_mb=25600,
         time=24
