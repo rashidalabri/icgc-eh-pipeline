@@ -54,7 +54,8 @@ rule genotype_aws:
         time=24
     threads: 16
     shell:
-        "score-client --profile collab download --output-dir {resources.tmpdir} "
+        "/home/rashid/score-client-5.8.1/bin/score-client "
+        "--profile collab download --output-dir {resources.tmpdir} "
         "--object-id {wildcards.object_id} > {log.score} && "
         "ExpansionHunter --reads {resources.tmpdir}/{params.file_name} "
         "--reference {input.fa} "
