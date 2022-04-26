@@ -54,9 +54,9 @@ rule genotype_aws:
         time=24
     threads: 16
     shell:
-        "score-client --profile collab download --output-dir {tmpdir} "
+        "score-client --profile collab download --output-dir {resources.tmpdir} "
         "--object-id {wildcards.object_id} > {log.score} && "
-        "ExpansionHunter --reads {tmpdir}/{params.file_name} "
+        "ExpansionHunter --reads {resources.tmpdir}/{params.file_name} "
         "--reference {input.fa} "
         "--variant-catalog {input.var} "
         "--output-prefix {params.prefix} "
