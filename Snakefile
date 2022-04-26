@@ -41,7 +41,7 @@ rule genotype_aws:
         prefix=lambda wildcards, output: output.json[:-5]
     output:
         json=S3.remote("icgc-eh-bucket/results/aws/{object_id}.json"),
-        vcf=S3.remote("icgc-eh-bucket/results/aws/{object_id}.vc"),
+        vcf=S3.remote("icgc-eh-bucket/results/aws/{object_id}.vcf"),
         realigned_bam=S3.remote("icgc-eh-bucket/results/aws/{object_id}_realigned.bam")
     envmodules:
         "samtools",
@@ -77,7 +77,7 @@ rule genotype_pdc:
         out_dir=lambda wildcards, output: "/".join(output.json.split("/")[:-1])
     output:
         json=S3.remote("icgc-eh-bucket/results/pdc/{guid}.json"),
-        vcf=S3.remote("icgc-eh-bucket/results/pdc/{guid}.vc"),
+        vcf=S3.remote("icgc-eh-bucket/results/pdc/{guid}.vcf"),
         realigned_bam=S3.remote("icgc-eh-bucket/results/pdc/{guid}_realigned.bam")
     envmodules:
         "samtools"
