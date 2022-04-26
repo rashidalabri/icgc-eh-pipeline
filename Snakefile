@@ -50,7 +50,7 @@ rule genotype_aws:
         score=S3.remote("icgc-eh-bucket/logs/aws/{object_id}-eh.log"),
         eh=S3.remote("icgc-eh-bucket/logs/aws/{object_id}-score-client.log")
     resources:
-        mem_mb=25600,
+        mem=25,
         time=24
     threads: 16
     shell:
@@ -83,7 +83,7 @@ rule genotype_pdc:
     log:
         S3.remote("icgc-eh-bucket/logs/pdc/{guid}.log")
     resources:
-        mem_mb=25600,
+        mem=25,
         time=24
     threads: 16
     shell:
