@@ -8,25 +8,25 @@ PDC_SAMPLES = pd.read_table("data/manifest.pdc.tsv").set_index("guid", drop=Fals
 rule aws:
     input:
         S3.remote(expand("icgc-eh-bucket/results/aws/{object_id}.json", object_id=AWS_SAMPLES.index)),
-        S3.remote(expand("icgc-eh-bucket/results/aws/{object_id}.vc", object_id=AWS_SAMPLES.index)),
+        S3.remote(expand("icgc-eh-bucket/results/aws/{object_id}.vcf", object_id=AWS_SAMPLES.index)),
         S3.remote(expand("icgc-eh-bucket/results/aws/{object_id}_realigned.bam", object_id=AWS_SAMPLES.index)),
 
 rule pdc:
     input:
         S3.remote(expand("icgc-eh-bucket/results/pdc/{guid}.json", guid=PDC_SAMPLES.index)),
-        S3.remote(expand("icgc-eh-bucket/results/pdc/{guid}.vc", guid=PDC_SAMPLES.index)),
+        S3.remote(expand("icgc-eh-bucket/results/pdc/{guid}.vcf", guid=PDC_SAMPLES.index)),
         S3.remote(expand("icgc-eh-bucket/results/pdc/{guid}_realigned.bam", guid=PDC_SAMPLES.index))
 
 rule test_pdc:
     input:
         S3.remote(f"icgc-eh-bucket/results/pdc/39dfdb0b-4a7d-4b35-ba0b-abd85b39f846.json"),
-        S3.remote(f"icgc-eh-bucket/results/pdc/39dfdb0b-4a7d-4b35-ba0b-abd85b39f846.vc"),
+        S3.remote(f"icgc-eh-bucket/results/pdc/39dfdb0b-4a7d-4b35-ba0b-abd85b39f846.vcf"),
         S3.remote(f"icgc-eh-bucket/results/pdc/39dfdb0b-4a7d-4b35-ba0b-abd85b39f846_realigned.bam")
 
 rule test_aws:
     input:
         S3.remote(f"icgc-eh-bucket/results/aws/ccf30f0f-0ec1-5aa2-8eb3-14cb1f4f58cd.json"),
-        S3.remote(f"icgc-eh-bucket/results/aws/ccf30f0f-0ec1-5aa2-8eb3-14cb1f4f58cd.vc"),
+        S3.remote(f"icgc-eh-bucket/results/aws/ccf30f0f-0ec1-5aa2-8eb3-14cb1f4f58cd.vcf"),
         S3.remote(f"icgc-eh-bucket/results/aws/ccf30f0f-0ec1-5aa2-8eb3-14cb1f4f58cd_realigned.bam")
 
 
